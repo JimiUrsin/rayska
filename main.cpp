@@ -4,23 +4,32 @@
 #include "vec3d.hpp"
 #include "writer.hpp"
 
-bool hit_sphere(const point3d& center, float radius, const ray& r) {
+float hit_sphere(const point3d& center, float radius, const ray& r) {
     vec3d oc = r.origin() - center;
 
     float a = dot(r.direction(), r.direction());
-    float b = 2.0f * dot(oc, r.direction());
+    float h = dot(oc, r.direction());
     float c = dot(oc, oc) - radius*radius;
 
-    float discriminant = b*b - 4*a*c;
-    return (discriminant > 0);
+    float discriminant = h*h - a*c;
+
+    if (discriminant < 0) {
+        return -1.0;
+    } else {
+        return (-h - std::sqrt(discriminant)) / a;
+    }
 }
 
 color ray_color(const ray& r) {
-    if (hit_sphere(point3d(0, 0, -1), 0.5, r)) {
-        return {1, 0, 0};
+    float t = hit_sphere(point3d(0,0,-1), 0.5, r);
+
+    if (t > 0.0) {
+        vec3d normal = unit_vector(r.at(t) - vec3d(0, 0, -1));
+        return 0.5*color(normal.x() + 1, normal.y() + 1, normal.z() + 1);
     }
+
     vec3d unit_direction = unit_vector(r.direction());
-    float t = 0.5f * (unit_direction.y() + 1.0f);
+    t = 0.5f * (unit_direction.y() + 1.0f);
     return (1.0f - t) * color(1.0, 1.0, 1.0) + t * color(0.7, 0.5, 1.0);
 }
 
