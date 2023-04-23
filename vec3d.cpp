@@ -7,6 +7,10 @@ float vec3d::x() const { return x_; }
 float vec3d::y() const { return y_; }
 float vec3d::z() const { return z_; }
 
+vec3d vec3d::operator-() const  {
+    return {-x_, -y_, -z_};
+}
+
 vec3d& vec3d::operator+=(const vec3d& rhs) {
     x_ += rhs.x_;
     y_ += rhs.y_;

@@ -13,6 +13,8 @@ public:
     [[nodiscard]] float y() const;
     [[nodiscard]] float z() const;
 
+    [[nodiscard]] vec3d operator-() const;
+
     vec3d& operator+=(const vec3d &v);
     vec3d& operator*=(float t);
     vec3d& operator/=(float t);
