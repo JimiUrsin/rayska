@@ -1,6 +1,7 @@
 #ifndef RAYSKA_RAY_HPP
 #define RAYSKA_RAY_HPP
 
+#include "common.hpp"
 #include "vec3d.hpp"
 
 class ray {
@@ -14,8 +15,8 @@ public:
     [[nodiscard]] point3d at(float t) const;
 
 private:
-    point3d orig;
-    vec3d dir;
+    point3d origin_;
+    vec3d direction_;
 };
 
 #endif //RAYSKA_RAY_HPP

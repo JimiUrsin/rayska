@@ -28,7 +28,11 @@ vec3d& vec3d::operator*=(float t) {
 }
 
 vec3d& vec3d::operator/=(float t) {
-    return *this *= 1/t;
+    x_ /= t;
+    y_ /= t;
+    z_ /= t;
+
+    return *this;
 }
 
 float vec3d::length() const {
@@ -38,6 +42,51 @@ float vec3d::length() const {
 float vec3d::length_squared() const {
     return (x_ * x_) + (y_ * y_) + (z_ * z_);
 }
+
+bool vec3d::near_zero() const {
+    const float threshold = 1e-8;
+    return (std::fabs(x_) < threshold) && (std::fabs(y_) < threshold) && (std::fabs(z_) < threshold);
+}
+
+vec3d vec3d::random() {
+    return {random_float(), random_float(), random_float()};
+}
+
+vec3d vec3d::random(float min, float max) {
+    return {random_float(min, max), random_float(min, max), random_float(min, max)};
+}
+
+vec3d vec3d::random_in_unit_sphere() {
+    while (true) {
+        vec3d p = random(-1, 1);
+        if (p.length_squared() >= 1) continue; // Outside sphere, try again
+        return p;
+    }
+}
+
+
+
+vec3d vec3d::random_unit_vector() {
+    return unit_vector(random_in_unit_sphere());
+}
+
+vec3d vec3d::random_in_hemisphere(const vec3d &normal) {
+    vec3d in_unit_sphere = random_in_unit_sphere();
+    if (dot(in_unit_sphere, normal) > 0.0)
+        return in_unit_sphere;
+    else
+        return -in_unit_sphere;
+}
+
+vec3d vec3d::random_in_unit_circle() {
+    while (true) {
+        vec3d random_in_circle = vec3d(random_float(-1, 1), random_float(-1, 1), 0);
+        if (random_in_circle.length_squared() >= 1) continue;
+        return random_in_circle;
+    }
+}
+
+
 
 vec3d operator+(const vec3d& lhs, const vec3d& rhs) {
     return {lhs.x() + rhs.x(),
@@ -87,4 +136,15 @@ vec3d cross(const vec3d& lhs, const vec3d& rhs) {
 
 vec3d unit_vector(vec3d v) {
     return v / v.length();
+}
+
+vec3d reflect(const vec3d& ray_in, const vec3d& normal) {
+    return ray_in - 2 * dot(ray_in, normal) * normal;
+}
+
+vec3d refract(const vec3d& ray_in, const vec3d& normal, float refractive_ratio) {
+    float cos_theta = std::fmin(dot(-ray_in, normal), 1.0f);
+    vec3d perpendicular_ray_out = refractive_ratio * (ray_in + cos_theta * normal);
+    vec3d parallel_ray_out = -std::sqrt(std::fabs(1.0f - perpendicular_ray_out.length_squared())) * normal;
+    return perpendicular_ray_out + parallel_ray_out;
 }
