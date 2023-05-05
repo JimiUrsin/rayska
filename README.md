@@ -11,6 +11,7 @@ Some ideas for further development, not necessarily in order of importance
 - A rudimentary CLI for creating worlds and renders, before a GUI is created
 - GUI
 - Additional object types
+- Robust testing
 - Reading .obj files
 - Texture mapping
 - Lights
