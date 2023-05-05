@@ -14,3 +14,6 @@ Some ideas for further development, not necessarily in order of importance
 - Reading .obj files
 - Texture mapping
 - Lights
+
+## Thanks
+[_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
