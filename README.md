@@ -16,5 +16,5 @@ Some ideas for further development, not necessarily in order of importance
 - Lights
 
 ## Thanks
-[Physically Based Rendering: From Theory To Implementation](https://www.pbr-book.org/)
-[_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+- [_Physically Based Rendering: From Theory To Implementation_](https://www.pbr-book.org/)
+- [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
