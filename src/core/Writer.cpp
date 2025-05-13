@@ -1,25 +1,26 @@
 #include "Writer.h"
 
 #include <algorithm>
-#include <cmath>
-#include <ostream>
+#include <fstream>
+#include <iostream>
 
 namespace Rayska
 {
 
-void writeColor(std::ostream &out, const Color &c, int samplesPerPixel)
+void writePpm(const std::string &filename, int width, int height, const std::vector<Color> &pixels)
 {
-    float b = c.z;
+    std::ofstream outfile{filename};
 
-    const float scale = 1.0f / static_cast<float>(samplesPerPixel);
+    outfile << "P3\n";
+    outfile << width << " " << height << "\n";
+    outfile << "255\n";
 
-    const float r = std::sqrt(scale * c.x);
-    const float g = std::sqrt(scale * c.y);
-    b = std::sqrt(scale * b);
-
-    out << static_cast<int>(256 * std::clamp(r, 0.0f, 0.999f)) << " "
-        << static_cast<int>(256 * std::clamp(g, 0.0f, 0.999f)) << " "
-        << static_cast<int>(256 * std::clamp(b, 0.0f, 0.999f)) << "\n";
+    for (const auto &pixel : pixels)
+    {
+        outfile << static_cast<int>(256 * std::clamp(pixel.x, 0.0f, 0.999f)) << " "
+                << static_cast<int>(256 * std::clamp(pixel.y, 0.0f, 0.999f)) << " "
+                << static_cast<int>(256 * std::clamp(pixel.z, 0.0f, 0.999f)) << "\n";
+    }
 }
 
 } // namespace Rayska

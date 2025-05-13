@@ -5,6 +5,6 @@
 namespace Rayska
 {
 
-void writeColor(std::ostream &out, const Color &c, int samplesPerPixel);
+void writePpm(const std::string &filename, int width, int height, const std::vector<Color> &pixels);
 
 } // namespace Rayska

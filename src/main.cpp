@@ -93,12 +93,12 @@ HittableList random_scene() {
 
 int main() {
     constexpr float aspectRatio = 3.0f / 2.0f;
-    constexpr int imgWidth = 640;
+    constexpr int imgWidth = 240;
     constexpr int imgHeight = static_cast<int>(imgWidth / aspectRatio);
-    constexpr int samplesPerPixel = 50;
+    constexpr int samplesPerPixel = 25;
     constexpr int maxDepth = 500;
 
-    const std::string FILENAME = "out.ppm";
+    const std::string filename = "out.ppm";
 
     const HittableList world = random_scene();
 
@@ -107,18 +107,17 @@ int main() {
     const Vec3d view_up(0, 1, 0);
     constexpr float focusDistance = 10.0f;
     constexpr float aperture = 0.0f;
-    Camera cam(look_from, look_at, view_up, 20, aspectRatio, aperture, focusDistance);
+    const Camera cam(look_from, look_at, view_up, 20, aspectRatio, aperture, focusDistance);
 
-    std::ofstream outfile(FILENAME);
+    std::vector<Color> pixels{};
+    pixels.reserve(imgWidth * imgHeight);
 
-    outfile << "P3\n";
-    outfile << imgWidth << " " << imgHeight << "\n";
-    outfile << "255\n";
+    constexpr float scale = 1.0f / static_cast<float>(samplesPerPixel);
 
     for (int y = imgHeight - 1; y >= 0; --y) {
         std::cout << "Scanlines remaining: " << y << "\n";
         for (int x = 0; x < imgWidth; ++x) {
-            Color pixel_color{};
+            auto &pixel_color = pixels.emplace_back();
 
             for (int i = 0; i < samplesPerPixel; ++i) {
                 const float x_pos = (random_float() + x) / (imgWidth - 1);
@@ -127,8 +126,11 @@ int main() {
                 pixel_color += ray_color(r, world, maxDepth);
             }
 
-            writeColor(outfile, pixel_color, samplesPerPixel);
+            pixel_color.x = std::sqrt(scale * pixel_color.x);
+            pixel_color.y = std::sqrt(scale * pixel_color.y);
+            pixel_color.z = std::sqrt(scale * pixel_color.z);
         }
     }
 
+    writePpm(filename, imgWidth, imgHeight, pixels);
 }

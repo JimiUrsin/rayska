@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Hittable.h"
 #include "../core/Vec3d.h"
+#include "Hittable.h"
 
 namespace Rayska
 {

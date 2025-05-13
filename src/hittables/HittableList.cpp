@@ -3,7 +3,7 @@
 namespace Rayska
 {
 
-HittableList::HittableList(std::shared_ptr<Hittable> object) {
+HittableList::HittableList(const std::shared_ptr<Hittable> &object) {
     objects.push_back(object);
 }
 
@@ -11,7 +11,7 @@ void HittableList::clear() {
     objects.clear();
 }
 
-void HittableList::add(std::shared_ptr<Hittable> object) {
+void HittableList::add(const std::shared_ptr<Hittable> &object) {
     objects.push_back(object);
 }
 
